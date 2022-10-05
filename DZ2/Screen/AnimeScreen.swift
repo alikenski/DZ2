@@ -18,14 +18,29 @@ struct AnimeScreen: View {
                 }
             }
             .onChange(of: viewModel.selectedAnime) { _ in
+                viewModel.resetQuotesAndPage()
                 viewModel.fetchQuotes()
             }
             .pickerStyle(.segmented)
             
             List {
                 ForEach(viewModel.quotes, id: \.self) { quote in
-                    Text(quote.character)
-                    Text(quote.quote)
+                    VStack {
+                        Text(quote.character)
+                        Text(quote.quote)
+                    }
+                    .onAppear {
+                        if !viewModel.isLoading, quote == viewModel.quotes[viewModel.quotes.count - 1] {
+                            viewModel.fetchQuotes()
+                        }
+                    }
+                }
+                if viewModel.isLoading {
+                    HStack {
+                        Spacer()
+                        ProgressView()
+                        Spacer()
+                    }
                 }
             }
         }

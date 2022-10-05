@@ -10,7 +10,9 @@ import StackNavigation
 
 struct AppRootView: View {
     var body: some View {
-        StackNavigation(transition: .custom(.scale, .slide)) {
+        StackNavigation(transition: .custom(AnyTransition.asymmetric(
+            insertion: .move(edge: .trailing),
+            removal: .move(edge: .leading)), .slide)) {
             FirstScreen()
         }
     }
